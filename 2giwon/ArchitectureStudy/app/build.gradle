@@ -52,6 +52,9 @@ dependencies {
     // Kotlin Extension
     implementation "androidx.core:core-ktx:$ktx_version"
 
+    // Paging
+    implementation "androidx.paging:paging-runtime:$pagingVersion"
+
     // Test
     testImplementation "junit:junit:$jnit_version"
     androidTestImplementation "androidx.test.ext:junit:$test_ext_version"

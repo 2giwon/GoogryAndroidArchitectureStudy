@@ -1,31 +1,36 @@
 package com.egiwon.architecturestudy.tabs
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.paging.PagedList
 import com.egiwon.architecturestudy.data.Content
-import com.egiwon.architecturestudy.data.source.NaverDataRepository
-import com.egiwon.architecturestudy.data.source.NaverDataSource
+import com.egiwon.architecturestudy.data.source.ContentSearchResult
+import com.egiwon.architecturestudy.data.source.NaverRepository
 
 class ContentsPresenter(
-    val contentsView: ContentsContract.View,
-    val naverDataRepository: NaverDataRepository
+    private val contentsView: ContentsContract.View,
+    private val naverDataRepository: NaverRepository
 ) : ContentsContract.Presenter {
+    private lateinit var type: String
+
+    private val queryLiveData = MutableLiveData<String>()
+    private val contentsSearchResult: LiveData<ContentSearchResult> =
+        Transformations.map(queryLiveData) {
+            naverDataRepository.getContents(type, it)
+        }
+
+    override val contents: LiveData<PagedList<Content.Item>> =
+        Transformations.switchMap(contentsSearchResult) {
+            it.data
+        }
 
     override fun loadContents(
         type: String,
         query: String
     ) {
-        naverDataRepository.getContents(
-            type = type,
-            query = query,
-            callback = object : NaverDataSource.Callback {
-                override fun onSuccess(list: List<Content.Item>) {
-                    contentsView.onUpdateUi(list)
-                }
-
-                override fun onFailure(throwable: Throwable) {
-                    contentsView.onFail(throwable)
-                }
-            }
-        )
+        this.type = type
+        queryLiveData.postValue(query)
     }
 
     override fun start() = Unit

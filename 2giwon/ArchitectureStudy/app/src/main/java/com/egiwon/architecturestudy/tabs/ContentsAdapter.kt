@@ -1,12 +1,11 @@
 package com.egiwon.architecturestudy.tabs
 
-import android.content.Intent
-import android.net.Uri
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
-import androidx.recyclerview.widget.RecyclerView
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.request.RequestOptions
 import com.egiwon.architecturestudy.R
+import com.egiwon.architecturestudy.Tab
 import com.egiwon.architecturestudy.base.BaseViewHolder
 import com.egiwon.architecturestudy.data.Content
 import com.egiwon.architecturestudy.ext.fromHtml
@@ -15,7 +14,7 @@ import com.egiwon.architecturestudy.ext.loadAsync
 
 class ContentsAdapter(
     private val tab: Tab
-) : RecyclerView.Adapter<BaseViewHolder>() {
+) : PagedListAdapter<Content.Item, BaseViewHolder>(CONTENT_COMPARATOR) {
 
     private val list = ArrayList<Content.Item>()
 
@@ -24,18 +23,6 @@ class ContentsAdapter(
             Tab.BLOG.ordinal, Tab.NEWS.ordinal -> TextViewHolder(parent)
             Tab.MOVIE.ordinal, Tab.BOOK.ordinal -> ImageViewHolder(parent)
             else -> throw IllegalArgumentException()
-        }.also { viewHolder ->
-            viewHolder.itemView.setOnClickListener {
-                viewHolder.linkUrl?.let { url ->
-                    startActivity(
-                        it.context,
-                        Intent(
-                            Intent.ACTION_VIEW, Uri.parse(url)
-                        ),
-                        null
-                    )
-                }
-            }
         }
 
 
@@ -79,4 +66,14 @@ class ContentsAdapter(
     }
 
     override fun getItemViewType(position: Int): Int = tab.ordinal
+
+    companion object {
+        private val CONTENT_COMPARATOR = object : DiffUtil.ItemCallback<Content.Item>() {
+            override fun areItemsTheSame(oldItem: Content.Item, newItem: Content.Item): Boolean =
+                oldItem.title == newItem.title
+
+            override fun areContentsTheSame(oldItem: Content.Item, newItem: Content.Item): Boolean =
+                oldItem == newItem
+        }
+    }
 }

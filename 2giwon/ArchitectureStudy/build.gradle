@@ -23,6 +23,9 @@ buildscript {
         // View Pager2
         viewpager2_version = '1.0.0-rc01'
 
+        //Paging
+        pagingVersion = '2.1.0'
+
         // Test
         jnit_version = '4.12'
         test_ext_version = '1.1.1'

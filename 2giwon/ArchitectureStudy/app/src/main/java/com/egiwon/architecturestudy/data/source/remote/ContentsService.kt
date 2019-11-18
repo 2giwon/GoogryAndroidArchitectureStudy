@@ -12,6 +12,10 @@ interface ContentsService {
         @Path("type")
         type: String,
         @Query("query")
-        query: String
+        query: String,
+        @Query("start")
+        start: String,
+        @Query("display")
+        display: String
     ): Call<Content>
 }
