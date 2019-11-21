@@ -23,8 +23,11 @@ buildscript {
         // View Pager2
         viewpager2_version = '1.0.0-rc01'
 
-        //Paging
+        // Paging
         pagingVersion = '2.1.0'
+
+        // Room
+        roomVersion = '2.2.1'
 
         // Test
         jnit_version = '4.12'

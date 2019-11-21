@@ -7,16 +7,16 @@ import com.bumptech.glide.request.RequestOptions
 import com.egiwon.architecturestudy.R
 import com.egiwon.architecturestudy.Tab
 import com.egiwon.architecturestudy.base.BaseViewHolder
-import com.egiwon.architecturestudy.data.Content
+import com.egiwon.architecturestudy.data.model.Content
 import com.egiwon.architecturestudy.ext.fromHtml
 import com.egiwon.architecturestudy.ext.loadAsync
 
 
 class ContentsAdapter(
     private val tab: Tab
-) : PagedListAdapter<Content.Item, BaseViewHolder>(CONTENT_COMPARATOR) {
+) : PagedListAdapter<Content, BaseViewHolder>(CONTENT_COMPARATOR) {
 
-    private val list = ArrayList<Content.Item>()
+    private val list = ArrayList<Content>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder =
         when (viewType) {
@@ -26,38 +26,40 @@ class ContentsAdapter(
         }
 
 
-    override fun getItemCount(): Int = list.size
-
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        with(holder) {
+        val item = getItem(position)
+        if (item != null) {
+            with(holder) {
 
-            tvTitle.text =
-                list[position].title.fromHtml()
+                tvTitle.text =
+                    item.title?.fromHtml()
 
-            tvDescription.text =
-                (list[position].actor + list[position].description)
-                    .fromHtml()
+                tvDescription.text =
+                    (item.actor + item.description)
+                        .fromHtml()
 
 
-            linkUrl = list[position].link
+                linkUrl = item.link
 
-            (holder as? ImageViewHolder)?.run {
-                loadImage(holder, position)
+                (holder as? ImageViewHolder)?.run {
+                    loadImage(holder, item.image)
+                }
             }
         }
+
     }
 
     private fun loadImage(
         holder: ImageViewHolder,
-        position: Int
+        imageUrl: String?
     ) {
         holder.imageThumbnail.loadAsync(
-            list[position].image,
+            imageUrl,
             RequestOptions.placeholderOf(R.mipmap.ic_launcher)
         )
     }
 
-    fun setList(items: List<Content.Item>) {
+    fun setList(items: List<Content>) {
         with(list) {
             clear()
             addAll(items)
@@ -68,11 +70,11 @@ class ContentsAdapter(
     override fun getItemViewType(position: Int): Int = tab.ordinal
 
     companion object {
-        private val CONTENT_COMPARATOR = object : DiffUtil.ItemCallback<Content.Item>() {
-            override fun areItemsTheSame(oldItem: Content.Item, newItem: Content.Item): Boolean =
+        private val CONTENT_COMPARATOR = object : DiffUtil.ItemCallback<Content>() {
+            override fun areItemsTheSame(oldItem: Content, newItem: Content): Boolean =
                 oldItem.title == newItem.title
 
-            override fun areContentsTheSame(oldItem: Content.Item, newItem: Content.Item): Boolean =
+            override fun areContentsTheSame(oldItem: Content, newItem: Content): Boolean =
                 oldItem == newItem
         }
     }

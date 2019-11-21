@@ -1,6 +1,6 @@
 package com.egiwon.architecturestudy.data.source.remote
 
-import com.egiwon.architecturestudy.data.Content
+import com.egiwon.architecturestudy.data.model.ContentSearchResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -17,5 +17,5 @@ interface ContentsService {
         start: String,
         @Query("display")
         display: String
-    ): Call<Content>
+    ): Call<ContentSearchResponse>
 }

@@ -9,20 +9,29 @@ import androidx.recyclerview.widget.RecyclerView
 import com.egiwon.architecturestudy.R
 import com.egiwon.architecturestudy.Tab
 import com.egiwon.architecturestudy.base.BaseFragment
-import com.egiwon.architecturestudy.data.Content
+import com.egiwon.architecturestudy.data.model.Content
 import com.egiwon.architecturestudy.data.source.NaverRepositoryImpl
+import com.egiwon.architecturestudy.data.source.local.ContentDataCache
+import com.egiwon.architecturestudy.data.source.local.ContentDatabase
+import com.egiwon.architecturestudy.data.source.remote.NaverRemoteDataSource
 import kotlinx.android.synthetic.main.fg_contents.*
+import java.util.concurrent.Executors
+
 
 class ContentsFragment : BaseFragment(
     R.layout.fg_contents
 ), ContentsContract.View {
 
-
     override val presenter: ContentsContract.Presenter by lazy {
 
         ContentsPresenter(
-            this,
-            NaverRepositoryImpl.getInstance()
+            NaverRepositoryImpl.getInstance(
+                NaverRemoteDataSource.getInstance(),
+                ContentDataCache(
+                    ContentDatabase.getInstance(requireContext()).contentsDao(),
+                    Executors.newSingleThreadExecutor()
+                )
+            )
         )
     }
 
@@ -53,13 +62,13 @@ class ContentsFragment : BaseFragment(
 
         presenter.contents.observe(
             this,
-            Observer {
+            Observer<PagedList<Content>> {
                 (rv_contents.adapter as? ContentsAdapter)?.submitList(it)
             }
         )
     }
 
-    override fun onUpdateUi(contents: PagedList<Content.Item>) {
+    override fun onUpdateUi(contents: PagedList<Content>) {
         (rv_contents.adapter as? ContentsAdapter)?.submitList(contents)
         hideProgress()
     }
