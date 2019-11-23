@@ -1,12 +1,11 @@
-package com.egiwon.architecturestudy.tabs
+package com.egiwon.architecturestudy.tabs.viewholder
 
 import android.view.ViewGroup
 import com.egiwon.architecturestudy.R
-import com.egiwon.architecturestudy.base.BaseViewHolder
 
 class TextViewHolder(
     parent: ViewGroup
-) : BaseViewHolder(
+) : ContentViewHolder(
     parent,
     R.layout.rv_text_contents_item
 )

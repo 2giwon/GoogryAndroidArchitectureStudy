@@ -3,61 +3,35 @@ package com.egiwon.architecturestudy.tabs
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.bumptech.glide.request.RequestOptions
-import com.egiwon.architecturestudy.R
 import com.egiwon.architecturestudy.Tab
 import com.egiwon.architecturestudy.base.BaseViewHolder
 import com.egiwon.architecturestudy.data.model.Content
-import com.egiwon.architecturestudy.ext.fromHtml
-import com.egiwon.architecturestudy.ext.loadAsync
+import com.egiwon.architecturestudy.tabs.viewholder.ImageViewHolder
+import com.egiwon.architecturestudy.tabs.viewholder.TextViewHolder
 
 
 class ContentsAdapter(
     private val tab: Tab
-) : PagedListAdapter<Content, BaseViewHolder>(CONTENT_COMPARATOR) {
+) : PagedListAdapter<Content, BaseViewHolder<Content>>(CONTENT_COMPARATOR) {
 
     private val list = ArrayList<Content>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Content> =
         when (viewType) {
-            Tab.BLOG.ordinal, Tab.NEWS.ordinal -> TextViewHolder(parent)
-            Tab.MOVIE.ordinal, Tab.BOOK.ordinal -> ImageViewHolder(parent)
+            Tab.BLOG.ordinal, Tab.NEWS.ordinal -> TextViewHolder(
+                parent
+            )
+            Tab.MOVIE.ordinal, Tab.BOOK.ordinal -> ImageViewHolder(
+                parent
+            )
             else -> throw IllegalArgumentException()
         }
 
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        val item = getItem(position)
-        if (item != null) {
-            with(holder) {
-
-                tvTitle.text =
-                    item.title?.fromHtml()
-
-                tvDescription.text =
-                    (item.actor + item.description)
-                        .fromHtml()
-
-
-                linkUrl = item.link
-
-                (holder as? ImageViewHolder)?.run {
-                    loadImage(holder, item.image)
-                }
-            }
-        }
-
+    override fun onBindViewHolder(holder: BaseViewHolder<Content>, position: Int) {
+        getItem(position)?.let { holder.bind(it) }
     }
 
-    private fun loadImage(
-        holder: ImageViewHolder,
-        imageUrl: String?
-    ) {
-        holder.imageThumbnail.loadAsync(
-            imageUrl,
-            RequestOptions.placeholderOf(R.mipmap.ic_launcher)
-        )
-    }
 
     fun setList(items: List<Content>) {
         with(list) {
