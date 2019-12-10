@@ -8,8 +8,18 @@ import io.reactivex.Single
 class NaverRemoteDataSource :
     NaverDataSource.Remote {
 
-    override fun getContents(type: String, query: String): Single<ContentResponse> =
-        RetrofitApi.retrofit.getContentsInfo(type = type, query = query)
+    override fun getContents(
+        type: String,
+        query: String,
+        display: Int,
+        start: Int
+    ): Single<ContentResponse> =
+        RetrofitApi.retrofit.getContentsInfo(
+            type = type,
+            query = query,
+            start = start.toString(),
+            display = display.toString()
+        )
 
     companion object {
         private var instance: NaverRemoteDataSource? = null

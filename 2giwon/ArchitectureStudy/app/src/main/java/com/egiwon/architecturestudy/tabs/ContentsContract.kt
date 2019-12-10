@@ -8,21 +8,22 @@ interface ContentsContract : BaseContract {
     interface View : BaseContract.View {
         fun showQueryResult(resultList: List<ContentItem>)
 
+        fun showQueryMoreResult(resultList: List<ContentItem>)
+
         fun showErrorQueryEmpty()
 
         fun showErrorLoadFail()
 
         fun showErrorResultEmpty()
 
-        fun showCacheContents(
-            resultList: List<ContentItem>,
-            query: String
-        )
+        fun showCacheContents(resultList: List<ContentItem>, query: String)
     }
 
     interface Presenter : BaseContract.Presenter {
         fun loadContents(type: Tab, query: String)
 
         fun getCacheContents(type: Tab)
+
+        fun listScrolled(visibleItemCount: Int, lastVisibleItemPosition: Int, totalItemCount: Int)
     }
 }

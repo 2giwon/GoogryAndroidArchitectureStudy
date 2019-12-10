@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.egiwon.architecturestudy.R
 import com.egiwon.architecturestudy.Tab
 import com.egiwon.architecturestudy.base.BaseFragment
@@ -30,14 +32,33 @@ class ContentsFragment : BaseFragment<ContentsContract.Presenter>(
         )
     }
 
-    override fun onResume() {
-        presenter.getCacheContents(tab)
-        super.onResume()
-    }
-
     private val tab: Tab by lazy {
         arguments?.get(ARG_TYPE) as? Tab
             ?: error(getString(R.string.type_is_null))
+    }
+
+    private fun setScrolllistener() {
+        with(rv_contents) {
+            val layoutManager = layoutManager as LinearLayoutManager
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (dy > 0) {
+                        val totalItemCount = layoutManager.itemCount
+                        val visibleItemCount = layoutManager.childCount
+                        val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+
+                        presenter.listScrolled(visibleItemCount, lastVisibleItem, totalItemCount)
+                    }
+                }
+            })
+        }
+
+    }
+
+    override fun onResume() {
+        presenter.getCacheContents(tab)
+        super.onResume()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -53,6 +74,8 @@ class ContentsFragment : BaseFragment<ContentsContract.Presenter>(
 
             adapter = ContentsAdapter(tab)
             setHasFixedSize(true)
+
+            setScrolllistener()
         }
 
         btn_search.setOnClickListener {
@@ -63,6 +86,10 @@ class ContentsFragment : BaseFragment<ContentsContract.Presenter>(
 
     override fun showQueryResult(resultList: List<ContentItem>) {
         (rv_contents.adapter as? ContentsAdapter)?.setList(resultList)
+    }
+
+    override fun showQueryMoreResult(resultList: List<ContentItem>) {
+        (rv_contents.adapter as? ContentsAdapter)?.addList(resultList)
     }
 
     override fun showErrorQueryEmpty() {
@@ -92,6 +119,7 @@ class ContentsFragment : BaseFragment<ContentsContract.Presenter>(
     override fun hideLoading() {
         progress_circular.visibility = View.GONE
     }
+
 
     companion object {
         private const val ARG_TYPE = "ARG_TYPE"
