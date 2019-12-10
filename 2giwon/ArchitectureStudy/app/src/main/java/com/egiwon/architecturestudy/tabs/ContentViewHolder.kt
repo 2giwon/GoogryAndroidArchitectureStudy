@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
+import androidx.core.text.parseAsHtml
 import com.egiwon.architecturestudy.R
 import com.egiwon.architecturestudy.base.BaseViewHolder
 import com.egiwon.architecturestudy.data.source.remote.response.ContentItem
-import com.egiwon.architecturestudy.ext.fromHtml
 import kotlinx.android.synthetic.main.rv_contents_item.view.*
 
 open class ContentViewHolder(
@@ -40,8 +41,9 @@ open class ContentViewHolder(
 
     override fun bind(item: ContentItem) {
         with(item) {
-            tvDescription.text = (actor + description).fromHtml()
-            tvTitle.text = title.fromHtml()
+            tvDescription.text =
+                (actor + description).parseAsHtml(HtmlCompat.FROM_HTML_MODE_COMPACT)
+            tvTitle.text = title.parseAsHtml(HtmlCompat.FROM_HTML_MODE_COMPACT)
             linkUrl = link
         }
     }
