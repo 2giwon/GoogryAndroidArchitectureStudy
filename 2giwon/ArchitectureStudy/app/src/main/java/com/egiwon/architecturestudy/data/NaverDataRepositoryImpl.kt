@@ -24,8 +24,8 @@ class NaverDataRepositoryImpl(
                     type,
                     query,
                     response
-                ).toSingle { response }
-
+                ).subscribeOn(Schedulers.io())
+                    .toSingle { response }
             } else {
                 Single.create { Throwable() }
             }

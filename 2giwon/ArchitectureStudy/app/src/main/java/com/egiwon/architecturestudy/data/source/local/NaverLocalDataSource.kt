@@ -13,8 +13,13 @@ class NaverLocalDataSource(
 
     override fun getCacheContents(type: String): Single<ContentResponse> =
         contentDao.getContentCache(type)
-            .onErrorReturn { Content.empty(type, "") }
-            .map { ContentResponse(it.query, it.list) }
+            .onErrorReturn { listOf(Content.empty(type, "")) }
+            .map {
+                ContentResponse(
+                    it[0].query,
+                    it.flatMap { content -> content.list }.toSet().toList()
+                )
+            }
             .toSingle()
             .subscribeOn(Schedulers.io())
 
