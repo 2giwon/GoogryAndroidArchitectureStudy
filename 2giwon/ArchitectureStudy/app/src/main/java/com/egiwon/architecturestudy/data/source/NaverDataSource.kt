@@ -18,12 +18,18 @@ interface NaverDataSource {
     interface Local {
         fun getCacheContents(type: String): Single<ContentResponse>
 
-        fun saveContents(type: String, query: String, response: ContentResponse): Completable
+        fun getSearchTime(type: String): Single<Long>
+
+        fun saveContents(
+            type: String,
+            query: String,
+            response: ContentResponse,
+            insertTime: Long
+        ): Completable
 
         fun getContents(type: String, query: String): Single<ContentResponse>
 
-        fun deleteContents(type: String): Completable
+        fun deleteContents(type: String, query: String): Completable
+
     }
-
-
 }
