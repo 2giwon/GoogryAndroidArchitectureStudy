@@ -6,15 +6,17 @@ import com.egiwon.architecturestudy.data.source.remote.response.ContentItem
 
 @Entity(tableName = "contents")
 data class Content(
-    @PrimaryKey
-    val id: Long,
     val list: List<ContentItem>,
     val type: String,
-    val query: String
+    val searchQuery: String = "",
+    val searchTime: Long,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0
 ) {
+
 
     companion object {
         fun empty(type: String, query: String): Content =
-            Content(System.currentTimeMillis(), emptyList(), type, query)
+            Content(emptyList(), type, query, System.currentTimeMillis())
     }
 }
