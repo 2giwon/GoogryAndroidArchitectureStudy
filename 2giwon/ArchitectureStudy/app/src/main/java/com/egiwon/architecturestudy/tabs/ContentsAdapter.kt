@@ -25,10 +25,9 @@ class ContentsAdapter(private val tab: Tab) :
     }
 
     fun addList(items: List<ContentItem>) {
-        with(list) {
-            addAll(items)
-            notifyDataSetChanged()
-        }
+        list.addAll(items)
+        submitList(list)
+        notifyDataSetChanged()
     }
 
     fun setList(items: List<ContentItem>) {
@@ -36,6 +35,7 @@ class ContentsAdapter(private val tab: Tab) :
             clear()
             addAll(items)
             submitList(this@ContentsAdapter.list)
+            notifyDataSetChanged()
         }
     }
 
