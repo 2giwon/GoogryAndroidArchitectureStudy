@@ -5,7 +5,6 @@ import com.egiwon.architecturestudy.Tab
 import com.egiwon.architecturestudy.base.BasePresenter
 import com.egiwon.architecturestudy.data.NaverDataRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class ContentsPresenter(
     private val contentsView: ContentsContract.View,
@@ -37,8 +36,7 @@ class ContentsPresenter(
             naverDataRepository.loadContents(
                 type = type.name,
                 query = query
-            ).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+            ).observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     contentsView.showLoading()
                 }
@@ -86,8 +84,8 @@ class ContentsPresenter(
                 naverDataRepository.requestMore(immutableType, immutableQuery)
                     .observeOn(AndroidSchedulers.mainThread())
                     .doAfterSuccess { setQuery(immutableType, immutableQuery) }
+                    .doAfterTerminate { oneTime = true }
                     .subscribe({
-                        oneTime = true
                         contentsView.showQueryMoreResult(it.contentItems)
                     }, {
                         contentsView.showErrorLoadFail()
@@ -99,8 +97,4 @@ class ContentsPresenter(
     private fun lastQueryValue(): String? = queryLiveData.value
 
     private fun lastTypeValue(): String? = typeLiveData.value
-
-    companion object {
-        private const val VISIBLE_THRESHOLD = 5
-    }
 }
