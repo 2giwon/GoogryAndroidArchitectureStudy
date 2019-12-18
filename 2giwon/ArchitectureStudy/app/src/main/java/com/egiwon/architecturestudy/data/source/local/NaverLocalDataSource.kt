@@ -16,22 +16,35 @@ class NaverLocalDataSource(
             .onErrorReturn { listOf(Content.empty(type, "")) }
             .map {
                 ContentResponse(
-                    it[0].query,
-                    it.flatMap { content -> content.list }.toSet().toList()
+                    it[0].searchQuery,
+                    it.flatMap { content -> content.list }.toList()
                 )
             }
             .toSingle()
             .subscribeOn(Schedulers.io())
 
-    override fun saveContents(type: String, query: String, response: ContentResponse): Completable =
+    override fun getSearchTime(type: String): Single<Long> =
+        contentDao.getSearchTime(type)
+            .onErrorReturn { 0L }
+            .toSingle()
+            .subscribeOn(Schedulers.io())
+
+
+    override fun saveContents(
+        type: String,
+        query: String,
+        response: ContentResponse,
+        insertTime: Long
+    ): Completable =
         contentDao.insertContent(
             Content(
-                System.currentTimeMillis(),
                 response.contentItems,
                 type,
-                query
+                query,
+                insertTime
             )
         )
+
 
     override fun getContents(
         type: String,
@@ -39,12 +52,12 @@ class NaverLocalDataSource(
     ): Single<ContentResponse> =
         contentDao.getContent(type, query)
             .onErrorReturn { Content.empty(type, "") }
-            .map { ContentResponse(it.query, it.list) }
+            .map { ContentResponse(it.searchQuery, it.list) }
             .toSingle()
             .subscribeOn(Schedulers.io())
 
-    override fun deleteContents(type: String): Completable =
-        contentDao.deleteContentsByType(type)
+    override fun deleteContents(type: String, query: String): Completable =
+        contentDao.deleteContents(type, query)
             .subscribeOn(Schedulers.io())
 
 
