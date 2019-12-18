@@ -11,19 +11,24 @@ import io.reactivex.Maybe
 @Dao
 interface ContentDao {
 
-    @Query("SELECT * FROM contents WHERE (type LIKE :type) ORDER BY id ASC")
+    @Query(
+        "SELECT * FROM contents WHERE (type LIKE :type) ORDER BY id ASC"
+    )
     fun getContentCache(type: String): Maybe<List<Content>>
 
     @Query(
-        "SELECT * FROM contents WHERE (type LIKE :type) OR " +
-                "(query LIKE :query) ORDER BY id DESC"
+        "SELECT * FROM contents WHERE (type LIKE :type) AND " +
+                "(searchQuery LIKE :query) ORDER BY id DESC"
     )
     fun getContent(type: String, query: String): Maybe<Content>
+
+    @Query("SELECT searchTime FROM contents WHERE (type LIKE :type) ORDER BY id ASC")
+    fun getSearchTime(type: String): Maybe<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertContent(content: Content): Completable
 
-    @Query("DELETE FROM contents WHERE (type LIKE :type)")
-    fun deleteContentsByType(type: String): Completable
+    @Query("DELETE FROM contents WHERE (type LIKE :type) AND (searchQuery LIKE :query)")
+    fun deleteContents(type: String, query: String): Completable
 
 }
