@@ -1,8 +1,24 @@
 package com.egiwon.architecturestudy.data.source
 
-import com.egiwon.architecturestudy.data.Content
+import com.egiwon.architecturestudy.data.source.remote.response.ContentResponse
+import io.reactivex.Completable
 import io.reactivex.Single
 
 interface NaverDataSource {
-    fun getContents(type: String, query: String): Single<Content>
+
+    interface Remote {
+        fun getContents(type: String, query: String): Single<ContentResponse>
+    }
+
+    interface Local {
+        fun getCacheContents(type: String): Single<ContentResponse>
+
+        fun getContentQuerys(type: String): Single<List<String>>
+
+        fun getContents(type: String, query: String): Single<ContentResponse>
+
+        fun saveContents(type: String, query: String, response: ContentResponse): Completable
+    }
+
+
 }
