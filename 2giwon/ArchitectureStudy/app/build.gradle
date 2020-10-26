@@ -1,27 +1,41 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
-
-apply from: "$rootDir/android_commons.gradle"
-apply from: "$rootDir/android_default_feature.gradle"
-apply from: "$rootDir/android_features.gradle"
 
 android{
 
-    afterEvaluate {
-        tasks.matching {
-            it.name.contains("preBuild")
+    compileSdkVersion AndroidConfig.COMPILE_SDK
+
+    defaultConfig {
+        applicationId AndroidConfig.APP_ID
+        minSdkVersion AndroidConfig.MIN_SDK
+        targetSdkVersion AndroidConfig.COMPILE_SDK
+        versionCode AndroidConfig.VERSION_CODE
+        versionName AndroidConfig.VERSION_NAME
+
+        testInstrumentationRunner AndroidConfig.TEST_INSTRUMENTATION_RUNNER
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    buildFeatures {
+        dataBinding = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
-
     androidExtensions {
         experimental = true
     }
@@ -36,11 +50,27 @@ dependencies {
     implementation project(":remote")
     implementation project(":local")
 
-    // Test
-    testImplementation "junit:junit:$jnit_version"
-    androidTestImplementation "androidx.test.ext:junit:$test_ext_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation Dependencies.KOTLIN_STDLIB
 
+    // AndroidX
+    implementation Dependencies.MATERIAL
+    implementation Dependencies.CONSTRAINT_LAYOUT
 
+    // Glide
+    implementation Dependencies.GLIDE
+
+    // Kotlin Extension
+    implementation Dependencies.CORE_KTX
+    implementation Dependencies.FRAGMENT_KTX
+
+    // Koin
+    implementation Dependencies.KOIN_VIEWMODEL
+
+    // Rxjava
+    implementation Dependencies.RXJAVA
+    implementation Dependencies.RX_ANDROID
+    implementation Dependencies.RX_KOTLIN
+    implementation Dependencies.RX_BINDING
 }
 

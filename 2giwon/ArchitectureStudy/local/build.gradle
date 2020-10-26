@@ -1,27 +1,18 @@
 apply plugin: 'com.android.library'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 
-apply from: "$rootDir/android_default_feature.gradle"
-apply from: "$rootDir/android_features.gradle"
-
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
-
+    compileSdkVersion AndroidConfig.COMPILE_SDK
 
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion AndroidConfig.MIN_SDK
+        targetSdkVersion AndroidConfig.COMPILE_SDK
+        versionCode AndroidConfig.VERSION_CODE
+        versionName AndroidConfig.VERSION_NAME
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
+        testInstrumentationRunner AndroidConfig.TEST_INSTRUMENTATION_RUNNER
     }
 
     buildTypes {
@@ -35,4 +26,19 @@ android {
 
 dependencies {
     implementation project(":data")
+
+    implementation Dependencies.KOTLIN_STDLIB
+
+    implementation Dependencies.RXJAVA
+    implementation Dependencies.RX_ANDROID
+    implementation Dependencies.RX_KOTLIN
+    implementation Dependencies.RX_BINDING
+
+    implementation DatabaseDependencies.ROOM_RUNTIME
+    kapt DatabaseDependencies.ROOM_COMPILER
+    implementation DatabaseDependencies.ROOM_RXJAVA
+
+    implementation Dependencies.CONVERTER_GSON
+
+    implementation Dependencies.KOIN_VIEWMODEL
 }
