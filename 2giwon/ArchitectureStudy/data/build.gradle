@@ -34,6 +34,9 @@ dependencies {
 
     implementation Dependencies.KOIN_VIEWMODEL
 
+    // Coroutines
+    implementation Dependencies.COROUTINE
+
     implementation TestDependencies.JUNIT
     implementation TestDependencies.EXT_JUNIT
     implementation TestDependencies.ESPRESSO
