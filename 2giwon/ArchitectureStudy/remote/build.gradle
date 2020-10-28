@@ -43,6 +43,9 @@ dependencies {
     implementation Dependencies.RX_KOTLIN
     implementation Dependencies.RX_BINDING
 
+    // Coroutines
+    implementation Dependencies.COROUTINE
+
     implementation TestDependencies.JUNIT
     implementation TestDependencies.EXT_JUNIT
     implementation TestDependencies.ESPRESSO
