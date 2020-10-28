@@ -72,5 +72,9 @@ dependencies {
     implementation Dependencies.RX_ANDROID
     implementation Dependencies.RX_KOTLIN
     implementation Dependencies.RX_BINDING
+
+    implementation TestDependencies.JUNIT
+    implementation TestDependencies.EXT_JUNIT
+    implementation TestDependencies.ESPRESSO
 }
 
