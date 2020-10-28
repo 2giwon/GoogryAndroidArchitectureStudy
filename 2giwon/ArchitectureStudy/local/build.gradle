@@ -36,11 +36,15 @@ dependencies {
 
     implementation DatabaseDependencies.ROOM_RUNTIME
     kapt DatabaseDependencies.ROOM_COMPILER
+    implementation DatabaseDependencies.ROOM_KTX
     implementation DatabaseDependencies.ROOM_RXJAVA
 
     implementation Dependencies.CONVERTER_GSON
 
     implementation Dependencies.KOIN_VIEWMODEL
+
+    // Coroutines
+    implementation Dependencies.COROUTINE
 
     implementation TestDependencies.JUNIT
     implementation TestDependencies.EXT_JUNIT
