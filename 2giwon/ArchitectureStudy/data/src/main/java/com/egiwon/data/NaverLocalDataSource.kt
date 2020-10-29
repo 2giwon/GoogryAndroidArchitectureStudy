@@ -1,15 +1,13 @@
 package com.egiwon.data
 
 import com.egiwon.data.model.ContentEntity
-import io.reactivex.Completable
-import io.reactivex.Single
 
 interface NaverLocalDataSource {
-    fun getCacheContents(type: String): Single<ContentEntity>
+    suspend fun getCacheContents(type: String): Result<ContentEntity>
 
-    fun getContentQueries(type: String): Single<List<String>>
+    suspend fun getContentQueries(type: String): Result<List<String>>
 
-    fun getLocalContents(type: String, query: String): Single<ContentEntity>
+    suspend fun getLocalContents(type: String, query: String): Result<ContentEntity>
 
-    fun saveContents(type: String, query: String, response: ContentEntity): Completable
+    suspend fun saveContents(type: String, query: String, response: ContentEntity)
 }
