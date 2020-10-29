@@ -1,14 +1,13 @@
 package com.egiwon.data
 
 import com.egiwon.data.model.ContentEntity
-import io.reactivex.Single
 
 interface NaverDataRepository {
-    fun getContents(type: String, query: String): Single<ContentEntity>
+    suspend fun getContents(type: String, query: String): Result<ContentEntity>
 
-    fun getContentsByHistory(type: String, query: String): Single<ContentEntity>
+    suspend fun getContentsByHistory(type: String, query: String): Result<ContentEntity>
 
-    fun getContentQueries(type: String): Single<List<String>>
+    suspend fun getContentQueries(type: String): Result<List<String>>
 
-    fun getCache(type: String): Single<ContentEntity>
+    suspend fun getCache(type: String): Result<ContentEntity>
 }
