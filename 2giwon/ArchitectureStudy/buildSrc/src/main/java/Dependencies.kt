@@ -53,7 +53,10 @@ object Dependencies {
 object TestDependencies {
     const val JUNIT = "junit:junit:4.12"
     const val EXT_JUNIT = "androidx.test.ext:junit:1.1.1"
-    const val ESPRESSO = "androidx.test.espresso:espresso-core:3.2.0"
+    const val ASSERTJ_CORE = "org.assertj:assertj-core:3.18.0"
+
+    const val MOCKK = "io.mockk:mockk:1.10.2"
+    const val ROOM_TEST = "androidx.room:room-testing:${DatabaseDependencies.ROOM_VER}"
 }
 
 object NetworkDependencies {
@@ -66,7 +69,7 @@ object NetworkDependencies {
 }
 
 object DatabaseDependencies {
-    private const val ROOM_VER = "2.2.2"
+    const val ROOM_VER = "2.2.5"
 
     const val ROOM_RUNTIME = "androidx.room:room-runtime:$ROOM_VER"
     const val ROOM_COMPILER = "androidx.room:room-compiler:$ROOM_VER"
