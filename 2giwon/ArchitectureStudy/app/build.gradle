@@ -78,7 +78,6 @@ dependencies {
 
     implementation TestDependencies.JUNIT
     implementation TestDependencies.EXT_JUNIT
-    implementation TestDependencies.ESPRESSO
 
     testImplementation TestDependencies.MOCKK
 }
