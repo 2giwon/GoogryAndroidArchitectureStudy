@@ -31,7 +31,7 @@ class TabFragment : Fragment() {
     private fun initViewPager() {
         binding.run {
             vpContent.run {
-                adapter = fragmentManager?.let { PagerAdapter(it) }
+                adapter = PagerAdapter(requireActivity().supportFragmentManager)
                 addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tlSearch))
             }
 
