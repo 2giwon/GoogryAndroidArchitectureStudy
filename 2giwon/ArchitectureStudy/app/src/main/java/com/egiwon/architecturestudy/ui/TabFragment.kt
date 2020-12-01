@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.egiwon.architecturestudy.R
 import com.egiwon.architecturestudy.databinding.FgTabBinding
-import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class TabFragment : Fragment() {
 
@@ -31,21 +31,12 @@ class TabFragment : Fragment() {
     private fun initViewPager() {
         binding.run {
             vpContent.run {
-                adapter = PagerAdapter(requireActivity().supportFragmentManager)
-                addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tlSearch))
+                adapter = PagerAdapter(this@TabFragment)
             }
 
-            with(tlSearch) {
-                Tab.values().forEach { addTab(newTab().setText(it.stringResId)) }
-                addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                    override fun onTabSelected(tab: TabLayout.Tab?) {
-                        tab?.run { vpContent.currentItem = position }
-                    }
-
-                    override fun onTabReselected(tab: TabLayout.Tab?) = Unit
-                    override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
-                })
-            }
+            TabLayoutMediator(tlSearch, vpContent) { tab, position ->
+                tab.text = getString(Tab.values()[position].stringResId)
+            }.attach()
         }
     }
 }
