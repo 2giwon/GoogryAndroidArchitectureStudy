@@ -58,29 +58,6 @@ class ContentViewModel(
         }
     }
 
-//    fun loadContents() {
-//        if (searchQuery.value.isNullOrBlank()) {
-//            mutableErrorTextResId.value = (R.string.error_query_empty)
-//        } else {
-//            naverDataRepository.getContents(
-//                type = tab.name,
-//                query = searchQuery.value!!
-//            ).observeOn(AndroidSchedulers.mainThread())
-//                .doOnSubscribe {
-//                    showLoading()
-//                }
-//                .doAfterTerminate {
-//                    hideLoading()
-//                }
-//                .subscribe({
-//                    _searchQueryResultList.value = it.contentItems
-//                }, {
-//                    mutableErrorTextResId.value = R.string.error_load_fail
-//                }).addDisposable()
-//
-//        }
-//    }
-
     private fun hideLoading() {
         _isShowLoadingProgressBar.value = false
     }
@@ -99,15 +76,6 @@ class ContentViewModel(
 
     }
 
-//    fun getCacheContents() {
-//        naverDataRepository.getCache(tab.name)
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe({
-//                _searchQueryResultList.value = it.contentItems
-//                searchQuery.value = it.query
-//            }, {}).addDisposable()
-//    }
-
     fun loadContentsByHistory(query: String) = viewModelScope.launch {
         when (val contents =
             naverDataRepository.getContentsByHistory(tab.name, query)) {
@@ -121,17 +89,5 @@ class ContentViewModel(
             }
         }
     }
-
-//    fun loadContentsByHistory(query: String) {
-//        naverDataRepository.getContentsByHistory(tab.name, query)
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe({
-//                _searchQueryResultList.value = it.contentItems
-//                searchQuery.value = it.query
-//                loadContents()
-//            }, {
-//                mutableErrorTextResId.value = R.string.error_load_fail
-//            }).addDisposable()
-//    }
 
 }

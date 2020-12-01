@@ -35,7 +35,7 @@ class ContentFragment : BaseFragment<FgContentsBinding, ContentViewModel>(
             vm = this@ContentFragment.viewModel
             rvContents.addItemDecoration(
                 DividerItemDecoration(
-                    context,
+                    requireContext(),
                     DividerItemDecoration.VERTICAL
                 )
             )
