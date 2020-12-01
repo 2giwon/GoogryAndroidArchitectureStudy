@@ -17,13 +17,6 @@ class HistoryViewModel(
     private val _searchHistoryResult = MutableLiveData<List<String>>()
     val searchHistoryResult: LiveData<List<String>> get() = _searchHistoryResult
 
-//    fun getSearchQueryHistory() =
-//        naverDataRepository.getContentQueries(tab.name)
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe({
-//                _searchHistoryResult.value = it
-//            }, {}).addDisposable()
-
     fun getSearchQueryHistory() = viewModelScope.launch {
         when (val content: Result<List<String>> = naverDataRepository.getContentQueries(tab.name)) {
             is Result.Success -> {
