@@ -48,5 +48,5 @@ dependencies {
 
     implementation TestDependencies.JUNIT
     implementation TestDependencies.EXT_JUNIT
-    implementation TestDependencies.ESPRESSO
+    implementation TestDependencies.ASSERTJ_CORE
 }

@@ -18,7 +18,7 @@ data class ContentResponseItem(
     val image: String = "",
     @SerializedName("subtitle")
     val subtitle: String = "",
-    @SerializedName("pubdate")
+    @SerializedName("pubDate")
     val pubDate: String = "",
     @SerializedName("director")
     val director: String = "",
